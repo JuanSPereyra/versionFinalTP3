@@ -2,7 +2,7 @@ package modelo.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,8 +21,13 @@ public class SolucionTest {
 	@Before
 	public void inicializar() {
 		instancia = new Instancia();
-		for (String n : new String[] { "A", "B", "C", "D", "E", "F", "H" })
-			instancia.agregarVertice(n);
+		instancia.agregarVertice("A");
+		instancia.agregarVertice("B");
+		instancia.agregarVertice("C");
+		instancia.agregarVertice("D");
+		instancia.agregarVertice("E");
+		instancia.agregarVertice("F");
+		instancia.agregarVertice("H");
 
 		instancia.agregarArista("A", "B");
 		instancia.agregarArista("B", "C");
@@ -81,43 +86,44 @@ public class SolucionTest {
 	@Test
 	public void agregarVerticeNoAgregaSusVecinosALaSolucionTest() {
 		solucion.agregar(c);
-		assertEquals(new HashSet<>(Arrays.asList(c)), solucion.getVertices());
+		assertEquals(Set.of(c), solucion.getVertices());
 	}
 
 	@Test
 	public void agregarVerticeDominaALosVecinosYASiMismoTest() {
 		solucion.agregar(c);
-		assertEquals(new HashSet<>(Arrays.asList(b, c, d, e)), dominados());
+		assertEquals(Set.of(b, c, d, e), dominados());
 	}
 
 	@Test
 	public void agregarElMismoVerticeDosVecesNoAumentaElCardinalTest() {
-		agregarTodos(Arrays.asList(c, c));
+		agregarTodos(List.of(c, c));
+
 		assertEquals(1, solucion.cardinal());
 	}
 
 	@Test
 	public void agregarVerticeAisladoSoloSeDominaASiMismoTest() {
 		solucion.agregar(h);
-		assertEquals(new HashSet<>(Arrays.asList(h)), dominados());
+		assertEquals(Set.of(h), dominados());
 	}
 
 	@Test
 	public void dominaTodoEsFalsoSiFaltanVerticesTest() {
-		agregarTodos(Arrays.asList(c, a, e));
+		agregarTodos(Set.of(c, a, e));
 		assertFalse(solucion.dominioIgualGrafo());
 	}
 
 	@Test
 	public void dominaTodoEsVerdaderoCuandoSeCubrenTodosTest() {
-		agregarTodos(Arrays.asList(c, a, e, h));
+		agregarTodos(Set.of(c, a, e, h));
 		assertTrue(solucion.dominioIgualGrafo());
 	}
 
 	@Test
 	public void getVerticesDevuelveLosElegidosTest() {
-		agregarTodos(Arrays.asList(c, h));
-		assertEquals(new HashSet<>(Arrays.asList(c, h)), solucion.getVertices());
+		agregarTodos(Set.of(c, h));
+		assertEquals(Set.of(c, h), solucion.getVertices());
 	}
 
 	@Test
@@ -147,7 +153,6 @@ public class SolucionTest {
 	@Test
 	public void nuevosCubiertosDeVerticeAisladoYaAgregadoEsCeroTest() {
 		solucion.agregar(h);
-
 		assertEquals(0, solucion.nuevosCubiertos(h));
 	}
 
@@ -171,7 +176,7 @@ public class SolucionTest {
 		return ret;
 	}
 
-	private void agregarTodos(List<Vertice> vertices) {
+	private void agregarTodos(Collection<Vertice> vertices) {
 		for (Vertice v : vertices) {
 			solucion.agregar(v);
 		}

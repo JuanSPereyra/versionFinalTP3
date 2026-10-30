@@ -27,6 +27,10 @@ public class Instancia {
 	public int grado(Vertice v) {
 		return grafo.grado(v);
 	}
+	
+	public int getTamanio() {
+		return grafo.cantidadVertices();
+	}
 
 	public int cantidadVertices() {
 		return grafo.cantidadVertices();

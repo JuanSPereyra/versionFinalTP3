@@ -36,7 +36,7 @@ public class GeneradorGrafo {
 		return grafoARetornar;
 	}
 
-	void iniciarGrafoYVertices(int cantidadVertices) {
+	public void iniciarGrafoYVertices(int cantidadVertices) {
 		this.cantidadVertices = cantidadVertices;
 		this.grafoARetornar = new Grafo();
 		this.listaDeVertices = new ArrayList<Vertice>();
@@ -71,7 +71,7 @@ public class GeneradorGrafo {
 		}
 	}
 
-	boolean agregado() {
+	public boolean agregado() {
 		Vertice verticeUno = listaDeVertices.get(generadorRnd.nextInt(cantidadVertices));
 		Vertice verticeDos = listaDeVertices.get(generadorRnd.nextInt(cantidadVertices));
 

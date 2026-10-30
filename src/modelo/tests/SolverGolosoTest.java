@@ -1,34 +1,76 @@
-package modelo.heuristicas;
+package modelo.tests;
 
 import static org.junit.Assert.*;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
-
 import modelo.Instancia;
 import modelo.Solucion;
 import modelo.grafo.Vertice;
+import modelo.heuristicas.SolverGoloso;
 
 public class SolverGolosoTest {
 
 	private Instancia instancia;
 	private SolverGoloso solver;
+	private static final Set<Vertice> _EsperadoPorCobertura = Set.of(new Vertice("H"), new Vertice("C"),
+			new Vertice("A"), new Vertice("E"));
+	private static final Set<Vertice> _EsperadoPorGradoMayor = Set.of(new Vertice("H"), new Vertice("C"),
+			new Vertice("B"), new Vertice("E"));
+	private Instancia enunciadoDelTp;
+	private SolverGoloso solverEnunciadoDelTp;
+	private static final Set<Vertice> _EsperadoTp = Set.of(new Vertice("2"), new Vertice("4"));
+	private Instancia instanciaVerticesAislados;
+	private SolverGoloso solverVerticesAislados;
+	private static final Set<Vertice> _TodosAisladosEsperado = Set.of(new Vertice("X"), new Vertice("Y"),
+			new Vertice("Z"));
+	private Instancia instanciaUnSoloVertice;
+	private SolverGoloso solverUnSoloVertice;
+	private static final Set<Vertice> _UnSoloVerticeEsperado = Set.of(new Vertice("X"));
 
 	@Before
 	public void inicializar() {
 		instancia = new Instancia();
-		cargarVertices(instancia, Arrays.asList("A", "B", "C", "D", "E", "F", "H"));
+		instancia.agregarVertice("A");
+		instancia.agregarVertice("B");
+		instancia.agregarVertice("C");
+		instancia.agregarVertice("D");
+		instancia.agregarVertice("E");
+		instancia.agregarVertice("F");
+		instancia.agregarVertice("H");
 		instancia.agregarArista("A", "B");
 		instancia.agregarArista("B", "C");
 		instancia.agregarArista("C", "D");
 		instancia.agregarArista("C", "E");
 		instancia.agregarArista("E", "F");
 		solver = new SolverGoloso(instancia);
+
+		enunciadoDelTp = new Instancia();
+		enunciadoDelTp.agregarVertice("1");
+		enunciadoDelTp.agregarVertice("2");
+		enunciadoDelTp.agregarVertice("3");
+		enunciadoDelTp.agregarVertice("4");
+		enunciadoDelTp.agregarVertice("5");
+		enunciadoDelTp.agregarVertice("6");
+		enunciadoDelTp.agregarArista("6", "4");
+		enunciadoDelTp.agregarArista("4", "5");
+		enunciadoDelTp.agregarArista("4", "3");
+		enunciadoDelTp.agregarArista("5", "1");
+		enunciadoDelTp.agregarArista("5", "2");
+		enunciadoDelTp.agregarArista("1", "2");
+		enunciadoDelTp.agregarArista("3", "2");
+		solverEnunciadoDelTp = new SolverGoloso(enunciadoDelTp);
+
+		instanciaVerticesAislados = new Instancia();
+		instanciaVerticesAislados.agregarVertice("X");
+		instanciaVerticesAislados.agregarVertice("Y");
+		instanciaVerticesAislados.agregarVertice("Z");
+		solverVerticesAislados = new SolverGoloso(instanciaVerticesAislados);
+
+		instanciaUnSoloVertice = new Instancia();
+		instanciaUnSoloVertice.agregarVertice("6");
+		solverUnSoloVertice = new SolverGoloso(instanciaUnSoloVertice);
 	}
 
 	@Test
@@ -44,7 +86,7 @@ public class SolverGolosoTest {
 
 	@Test
 	public void coberturaDaElConjuntoEsperadoTest() {
-		assertEquals(conjunto(Arrays.asList("H", "C", "A", "E")), solver.resolverPorMayorCobertura().getVertices());
+		assertEquals(_EsperadoPorCobertura, solver.resolverPorMayorCobertura().getVertices());
 	}
 
 	@Test
@@ -60,8 +102,7 @@ public class SolverGolosoTest {
 
 	@Test
 	public void gradoDaElConjuntoEsperadoTest() {
-
-		assertEquals(conjunto(Arrays.asList("H", "C", "B", "E")), solver.resolverPorGradoMayor().getVertices());
+		assertEquals(_EsperadoPorGradoMayor, solver.resolverPorGradoMayor().getVertices());
 	}
 
 	@Test
@@ -89,33 +130,27 @@ public class SolverGolosoTest {
 
 	@Test
 	public void unSoloVerticeEntraEnLaSolucionTest() {
-		Solucion s = new SolverGoloso(instanciaConAislados(Arrays.asList("X"))).resolverPorGradoMayor();
-		assertEquals(1, s.cardinal());
+		assertEquals(_UnSoloVerticeEsperado.size(), solverUnSoloVertice.resolverPorGradoMayor().cardinal());
 	}
 
 	@Test
 	public void todosAisladosEntranTodosTest() {
-		Instancia aislados = instanciaConAislados(Arrays.asList("X", "Y", "Z"));
-		assertEquals(3, new SolverGoloso(aislados).resolverPorPesoDelVertice().cardinal());
+		assertEquals(_TodosAisladosEsperado.size(), solverVerticesAislados.resolverPorPesoDelVertice().cardinal());
 	}
 
 	@Test
 	public void coberturaEncuentraElOptimoDelEnunciadoTest() {
-		Instancia enunciado = enunciadoDelTp();
-		assertEquals(2, new SolverGoloso(enunciado).resolverPorMayorCobertura().cardinal());
+		assertEquals(_EsperadoTp.size(), solverEnunciadoDelTp.resolverPorMayorCobertura().cardinal());
 	}
 
 	@Test
 	public void gradoEncuentraElOptimoDelEnunciadoTest() {
-		Instancia enunciado = enunciadoDelTp();
-		assertEquals(conjunto(Arrays.asList("2", "4")),
-				new SolverGoloso(enunciado).resolverPorGradoMayor().getVertices());
+		assertEquals(_EsperadoTp, solverEnunciadoDelTp.resolverPorGradoMayor().getVertices());
 	}
 
 	@Test
 	public void pesoVerticeDominaElGrafoDelEnunciadoTest() {
-		Instancia enunciado = enunciadoDelTp();
-		assertTrue(esDominante(enunciado, new SolverGoloso(enunciado).resolverPorPesoDelVertice()));
+		assertTrue(esDominante(enunciadoDelTp, solverEnunciadoDelTp.resolverPorPesoDelVertice()));
 	}
 
 	@Test
@@ -178,40 +213,8 @@ public class SolverGolosoTest {
 
 	@Test
 	public void todasLasEstrategiasDominanElGrafoDelEnunciadoTest() {
-		Instancia enunciado = enunciadoDelTp();
-		for (Solucion s : new SolverGoloso(enunciado).resolver())
-			assertTrue(esDominante(enunciado, s));
-	}
-
-	private void cargarVertices(Instancia i, List<String> nombres) {
-		for (String n : nombres)
-			i.agregarVertice(n);
-	}
-
-	private Instancia instanciaConAislados(List<String> nombres) {
-		Instancia i = new Instancia();
-		cargarVertices(i, nombres);
-		return i;
-	}
-
-	private Instancia enunciadoDelTp() {
-		Instancia i = new Instancia();
-		String[] vertices = { "1", "2", "3", "4", "5", "6" };
-		String[][] aristas = { { "6", "4" }, { "4", "5" }, { "4", "3" }, { "5", "1" }, { "5", "2" }, { "1", "2" },
-				{ "3", "2" } };
-
-		for (String v : vertices)
-			i.agregarVertice(v);
-		for (String[] a : aristas)
-			i.agregarArista(a[0], a[1]);
-		return i;
-	}
-
-	private Set<Vertice> conjunto(List<String> nombres) {
-		Set<Vertice> ret = new HashSet<>();
-		for (String n : nombres)
-			ret.add(new Vertice(n));
-		return ret;
+		for (Solucion s : solverEnunciadoDelTp.resolver())
+			assertTrue(esDominante(enunciadoDelTp, s));
 	}
 
 	private boolean esDominante(Instancia i, Solucion s) {

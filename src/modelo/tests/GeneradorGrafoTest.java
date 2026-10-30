@@ -1,4 +1,4 @@
-package modelo.backtracking;
+package modelo.tests;
 
 import static org.junit.Assert.*;
 
@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import generadorRandomWrapper.GeneradorPrefijado;
 import generadorRandomWrapper.GeneradorAleatorio;
+import modelo.backtracking.GeneradorGrafo;
 import modelo.grafo.Grafo;
 import modelo.grafo.Vertice;
 

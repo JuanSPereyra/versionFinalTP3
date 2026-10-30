@@ -30,35 +30,35 @@ public class SolverGoloso {
 		return conjuntoSoluciones;
 	}
 
-	Solucion resolverPorMayorCobertura() {
+	public Solucion resolverPorMayorCobertura() {
 		Solucion parcial = new Solucion(instancia);
 
 		return resolver(parcial, (a, b) -> Integer.compare(parcial.nuevosCubiertos(b), parcial.nuevosCubiertos(a)));
 	}
 
-	Solucion resolverPorMenorCobertura() {
+	public Solucion resolverPorMenorCobertura() {
 		Solucion parcial = new Solucion(instancia);
 
 		return resolver(parcial, (a, b) -> Integer.compare(parcial.nuevosCubiertos(a), parcial.nuevosCubiertos(b)));
 	}
 
-	Solucion resolverPorGradoMayor() {
+	public Solucion resolverPorGradoMayor() {
 		return resolver(new Solucion(instancia), (a, b) -> Integer.compare(instancia.grado(b), instancia.grado(a)));
 	}
 
-	Solucion resolverPorGradoMenor() {
+	public Solucion resolverPorGradoMenor() {
 		return resolver(new Solucion(instancia), (a, b) -> Integer.compare(instancia.grado(a), instancia.grado(b)));
 	}
 
-	Solucion resolverPorNombre() {
+	public Solucion resolverPorNombre() {
 		return resolver(new Solucion(instancia), (a, b) -> a.getNombre().compareTo(b.getNombre()));
 	}
 
-	Solucion resolverPorNombreInverso() {
+	public Solucion resolverPorNombreInverso() {
 		return resolver(new Solucion(instancia), (a, b) -> b.getNombre().compareTo(a.getNombre()));
 	}
 
-	Solucion resolverPorPesoDelVertice() {
+	public Solucion resolverPorPesoDelVertice() {
 		Solucion parcial = new Solucion(instancia);
 
 		return resolver(parcial, (a, b) -> Double.compare(puntajePorVecino(b, parcial), puntajePorVecino(a, parcial)));

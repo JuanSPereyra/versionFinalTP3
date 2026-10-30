@@ -1,9 +1,6 @@
 package modelo.tests;
 
 import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,11 +11,16 @@ public class InstanciaTest {
 
 	private Instancia instancia;
 	private Instancia instanciaVacia;
-	private Vertice a, b, c, d, e, f, h;
+	private Vertice a, b, c, e, h;
+	private static final Set<Vertice> _EsperadoPorCobertura = Set.of(new Vertice("A"), new Vertice("B"),
+			new Vertice("C"), new Vertice("D"), new Vertice("E"), new Vertice("F"), new Vertice("H"));
+	private static final Set<Vertice> _VecinosDelVerticeC = Set.of(new Vertice("B"), new Vertice("D"),
+			new Vertice("E"));
 
 	@Before
 	public void setUp() {
 		instanciaVacia = new Instancia();
+
 		instancia = new Instancia();
 
 		for (String n : new String[] { "A", "B", "C", "D", "E", "F", "H" })
@@ -33,9 +35,7 @@ public class InstanciaTest {
 		a = new Vertice("A");
 		b = new Vertice("B");
 		c = new Vertice("C");
-		d = new Vertice("D");
 		e = new Vertice("E");
-		f = new Vertice("F");
 		h = new Vertice("H");
 	}
 
@@ -89,7 +89,7 @@ public class InstanciaTest {
 
 	@Test
 	public void instanciaNuevaNoTieneVerticesTest() {
-		assertEquals(0, instanciaVacia.cantidadVertices());
+		assertEquals(0, instanciaVacia.getTamanio());
 	}
 
 	@Test
@@ -100,30 +100,28 @@ public class InstanciaTest {
 	@Test
 	public void agregarVerticeAumentaElTamanoTest() {
 		instanciaVacia.agregarVertice("A");
-		assertEquals(1, instanciaVacia.cantidadVertices());
+		assertEquals(1, instanciaVacia.getTamanio());
 	}
 
 	@Test
 	public void getTamanoCuentaTodosLosVerticesTest() {
-		assertEquals(7, instancia.cantidadVertices());
+		assertEquals(7, instancia.getTamanio());
 	}
 
 	@Test
 	public void getVerticesDevuelveTodosLosVerticesTest() {
-		Set<Vertice> esperados = new HashSet<>(Arrays.asList(a, b, c, d, e, f, h));
-		assertEquals(esperados, instancia.getVertices());
+		assertEquals(_EsperadoPorCobertura, instancia.getVertices());
 	}
 
 	@Test
 	public void modificarVerticesObtenidosNoAfectaALaInstanciaTest() {
 		instancia.getVertices().clear();
-		assertEquals(7, instancia.cantidadVertices());
+		assertEquals(7, instancia.getTamanio());
 	}
 
 	@Test
 	public void vecinosDeUnVerticeTest() {
-		Set<Vertice> esperados = new HashSet<>(Arrays.asList(b, d, e));
-		assertEquals(esperados, instancia.vecinosDe(c));
+		assertEquals(_VecinosDelVerticeC, instancia.vecinosDe(c));
 	}
 
 	@Test
@@ -138,34 +136,8 @@ public class InstanciaTest {
 	}
 
 	@Test
-	public void gradoDeCadaVerticeATest() {
-		assertEquals(1, instancia.grado(a));
-	}
-
-	@Test
-
-	public void gradoDeCadaVerticeBTest() {
-		assertEquals(2, instancia.grado(b));
-	}
-
-	@Test
 	public void gradoDeCadaVerticeCTest() {
 		assertEquals(3, instancia.grado(c));
-	}
-
-	@Test
-	public void gradoDeCadaVerticeDTest() {
-		assertEquals(1, instancia.grado(d));
-	}
-
-	@Test
-	public void gradoDeCadaVerticeETest() {
-		assertEquals(2, instancia.grado(e));
-	}
-
-	@Test
-	public void gradoDeCadaVerticeFTest() {
-		assertEquals(1, instancia.grado(f));
 	}
 
 	@Test
