@@ -2,32 +2,32 @@ package modelo.grafo;
 
 public class Arista {
 
-	private Vertice origen;
-	private Vertice destino;
+	private Vertice verticeUno;
+	private Vertice verticeDos;
 
-	public Arista(Vertice origen, Vertice destino) {
-		this.origen = origen;
-		this.destino = destino;
+	public Arista(Vertice verticeUno, Vertice verticeDos) {
+		this.verticeUno = verticeUno;
+		this.verticeDos = verticeDos;
 	}
 
-	public Vertice getOrigen() {
-		return origen;
+	public Vertice getVerticeUno() {
+		return verticeUno;
 	}
 
-	public Vertice getDestino() {
-		return destino;
+	public Vertice getVerticeDos() {
+		return verticeDos;
 	}
 
 	public Vertice obtenerOpuesto(Vertice v) {
-		if (getOrigen().equals(v))
-			return getDestino();
-		if (getDestino().equals(v))
-			return getOrigen();
+		if (getVerticeUno().equals(v))
+			return getVerticeDos();
+		if (getVerticeDos().equals(v))
+			return getVerticeUno();
 		throw new IllegalArgumentException("El vertice no pertenece a esta arista.");
 	}
 
 	@Override
 	public String toString() {
-		return origen + " -- " + destino;
+		return verticeUno + " -- " + verticeDos;
 	}
 }

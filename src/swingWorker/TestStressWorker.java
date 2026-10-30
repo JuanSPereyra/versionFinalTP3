@@ -76,7 +76,7 @@ public class TestStressWorker extends SwingWorker<String, String> {
 
 	private Set<Vertice> resolverGrafo(int vertices, int aristas) {
 
-		GeneradorGrafo.setGenerador(new GeneradorAleatorio());
+		GeneradorGrafo.setGenerador(new GeneradorAleatorio(0));
 		Grafo g = generadorGrafoRnd.grafoRandom(vertices, aristas);
 
 		backTrackingActual = new BackTracking();

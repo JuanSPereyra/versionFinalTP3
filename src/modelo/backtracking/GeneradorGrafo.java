@@ -10,7 +10,6 @@ import modelo.grafo.Vertice;
 public class GeneradorGrafo {
 	private int cantidadVertices;
 	private int cantidadAristas;
-	long semilla;
 	private Grafo grafoARetornar;
 	private List<Vertice> listaDeVertices;
 	private static Generador generadorRnd;
@@ -73,11 +72,11 @@ public class GeneradorGrafo {
 	}
 
 	boolean agregado() {
-		Vertice origen = listaDeVertices.get(generadorRnd.nextInt(cantidadVertices));
-		Vertice destino = listaDeVertices.get(generadorRnd.nextInt(cantidadVertices));
+		Vertice verticeUno = listaDeVertices.get(generadorRnd.nextInt(cantidadVertices));
+		Vertice verticeDos = listaDeVertices.get(generadorRnd.nextInt(cantidadVertices));
 
-		if (!origen.equals(destino) && !grafoARetornar.existeArista(origen, destino)) {
-			grafoARetornar.agregarArista(origen, destino);
+		if (!verticeUno.equals(verticeDos) && !grafoARetornar.existeArista(verticeUno, verticeDos)) {
+			grafoARetornar.agregarArista(verticeUno, verticeDos);
 			return true;
 		} else {
 			return false;

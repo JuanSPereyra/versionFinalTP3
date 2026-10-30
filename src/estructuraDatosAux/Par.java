@@ -1,19 +1,19 @@
 package estructuraDatosAux;
 
 public class Par<A, B> {
-	private A izquierda;
-	private B derecha;
+	private A objetoUno;
+	private B objetoDos;
 
-	public Par(A izquierda, B derecha) {
-		this.izquierda = izquierda;
-		this.derecha = derecha;
+	public Par(A objetoUno, B objetoDos) {
+		this.objetoUno = objetoUno;
+		this.objetoDos = objetoDos;
 	}
 
-	public A getIzquierda() {
-		return izquierda;
+	public A getObjetoUno() {
+		return objetoUno;
 	}
 
-	public B getDerecha() {
-		return derecha;
+	public B getObjetoDos() {
+		return objetoDos;
 	}
 }

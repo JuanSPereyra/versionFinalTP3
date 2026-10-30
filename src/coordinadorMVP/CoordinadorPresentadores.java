@@ -3,6 +3,7 @@ package coordinadorMVP;
 import vista.interfaz.InterfazGestorPantalla;
 import vista.pantalla.*;
 import presentador.*;
+import estructuraDatosAux.OrigenCarga;
 import modelo.Instancia;
 
 public class CoordinadorPresentadores {

@@ -1,14 +1,14 @@
 package estructuraDatosAux;
 
 public class AristaJson {
-	private String origen;
-	private String destino;
+	private String verticeUno;
+	private String verticeDos;
 
-	public String getOrigen() {
-		return origen;
+	public String verticeUno() {
+		return verticeUno;
 	}
 
-	public String getDestino() {
-		return destino;
+	public String verticeDos() {
+		return verticeDos;
 	}
 }

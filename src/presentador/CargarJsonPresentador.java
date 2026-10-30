@@ -6,7 +6,7 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import datos.CargadorJson;
+import cargadorJson.CargadorJson;
 import estructuraDatosAux.AristaJson;
 import estructuraDatosAux.GrafoJson;
 import modelo.Instancia;
@@ -81,7 +81,7 @@ public class CargarJsonPresentador {
 	private void cargarAristas() {
 		if (datosGrafo.getAristas() != null) {
 			for (AristaJson arista : datosGrafo.getAristas()) {
-				instancia.agregarArista(arista.getOrigen().trim(), arista.getDestino().trim());
+				instancia.agregarArista(arista.verticeUno().trim(), arista.verticeDos().trim());
 			}
 		}
 	}

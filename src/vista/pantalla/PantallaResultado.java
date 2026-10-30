@@ -9,9 +9,8 @@ import javax.swing.*;
 
 import estructuraDatosAux.Par;
 import estructuraDatosAux.VerticeVisual;
-
+import vista.graficador.LibreriaMxGraphWrapper;
 import vista.interfaz.ResultadoVista;
-import vista.grafico.LibreriaMxGraphWrapper;
 
 @SuppressWarnings("serial")
 public class PantallaResultado extends JFrame implements ResultadoVista {
@@ -27,6 +26,8 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	private JComboBox<Object> comboSoluciones;
 	private JComponent componenteDibujoDeGrafo;
 	private JScrollPane scrollPane;
+
+	private HashMap<String, Object> mapaDeVertices;
 
 	public PantallaResultado() {
 
@@ -183,36 +184,44 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	public void mostrarGrafo(List<VerticeVisual> vertices, List<Par<String, String>> aristas) {
 
 		graficadorDeGrafo = new LibreriaMxGraphWrapper();
-		Object parent = graficadorDeGrafo.getParent();
-		Map<String, Object> mapaDeVertices = new HashMap<>();
+		mapaDeVertices = new HashMap<>();
 
 		try {
-
 			graficadorDeGrafo.actualizar();
-
-			for (VerticeVisual vertice : vertices) {
-
-				String estiloVertice = vertice.esDominante() ? graficadorDeGrafo.estiloVerticeDominante()
-						: graficadorDeGrafo.estiloVerticeNoDominante();
-
-				String nombreV = vertice.getNombre();
-
-				Object nodo = graficadorDeGrafo.insertarVertice(parent, null, nombreV, 0, 0, 50, 50, estiloVertice);
-				mapaDeVertices.put(nombreV, nodo);
-			}
-
-			String estiloArista = graficadorDeGrafo.estiloArista();
-
-			for (Par<String, String> arista : aristas) {
-				graficadorDeGrafo.insertarArista(parent, null, "", mapaDeVertices.get(arista.getIzquierda()),
-						mapaDeVertices.get(arista.getDerecha()), estiloArista);
-			}
+			agregarVerticesYAristasAlGrafico(vertices, aristas);
 
 		} finally {
 			graficadorDeGrafo.finActualizar();
 		}
 
 		configuracionFinal();
+	}
+
+	private void agregarVerticesYAristasAlGrafico(List<VerticeVisual> vertices, List<Par<String, String>> aristas) {
+		for (VerticeVisual vertice : vertices) {
+			agregarVerticeAlGrafico(vertice);
+		}
+
+		for (Par<String, String> arista : aristas) {
+			agregarAristaAlGrafico(arista);
+		}
+	}
+
+	private void agregarVerticeAlGrafico(VerticeVisual vertice) {
+		String estiloVertice = vertice.esDominante() ? graficadorDeGrafo.estiloVerticeDominante()
+				: graficadorDeGrafo.estiloVerticeNoDominante();
+
+		String nombreV = vertice.getNombre();
+
+		Object nodo = graficadorDeGrafo.insertarVertice(nombreV, estiloVertice);
+		mapaDeVertices.put(nombreV, nodo);
+	}
+
+	private void agregarAristaAlGrafico(Par<String, String> arista) {
+		Object objetoUno = mapaDeVertices.get(arista.getObjetoUno());
+		Object objetoDos = mapaDeVertices.get(arista.getObjetoDos());
+		
+		graficadorDeGrafo.insertarArista(objetoUno, objetoDos);
 	}
 
 	private void configuracionFinal() {

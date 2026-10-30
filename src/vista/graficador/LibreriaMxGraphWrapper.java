@@ -1,4 +1,4 @@
-package vista.grafico;
+package vista.graficador;
 
 import java.awt.Color;
 
@@ -10,9 +10,11 @@ import com.mxgraph.view.mxGraph;
 
 public class LibreriaMxGraphWrapper {
 	private mxGraph graficoGrafo;
+	private Object parent;
 
 	public LibreriaMxGraphWrapper() {
 		this.graficoGrafo = new mxGraph();
+		this.parent = getParent();
 	}
 
 	public Object getParent() {
@@ -23,17 +25,17 @@ public class LibreriaMxGraphWrapper {
 		return graficoGrafo.getModel();
 	}
 
-	public Object insertarVertice(Object parent, Object object, String v, int i, int j, int k, int l, String estilo) {
-		return graficoGrafo.insertVertex(parent, null, v, i, j, k, l, estilo);
+	public Object insertarVertice(String nombreV, String estilo) {
+		return graficoGrafo.insertVertex(parent, null, nombreV, 0, 0, 50, 50, estilo);
 	}
 
 	public void actualizar() {
 		graficoGrafo.getModel().beginUpdate();
 	}
 
-	public Object insertarArista(Object parent, Object object, String string, Object object2, Object object3,
-			String estilo) {
-		return graficoGrafo.insertEdge(object, null, string, object2, object3, estilo);
+	public Object insertarArista(Object verticeUno, Object verticeDos) {
+		String estiloArista = estiloArista();
+		return graficoGrafo.insertEdge(parent, null, "", verticeUno, verticeDos, estiloArista);
 	}
 
 	public void finActualizar() {

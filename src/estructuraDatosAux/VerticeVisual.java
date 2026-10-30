@@ -1,12 +1,13 @@
 package estructuraDatosAux;
 
 public class VerticeVisual {
-	private String nombre;
-	private boolean esDominante;
 
-	public VerticeVisual(String nombre, boolean esDominante) {
+	private String nombre;
+	private TipoVertice tipo;
+
+	public VerticeVisual(String nombre, TipoVertice tipo) {
 		this.nombre = nombre;
-		this.esDominante = esDominante;
+		this.tipo = tipo;
 	}
 
 	public String getNombre() {
@@ -14,6 +15,6 @@ public class VerticeVisual {
 	}
 
 	public boolean esDominante() {
-		return this.esDominante;
+		return this.tipo == TipoVertice.DOMINANTE;
 	}
 }

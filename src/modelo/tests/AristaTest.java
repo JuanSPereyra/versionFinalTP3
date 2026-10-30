@@ -28,13 +28,13 @@ public class AristaTest {
 	@Test
 	public void obtenerOrigenTest() {
 		Arista arista = new Arista(a, b);
-		assertEquals(a, arista.getOrigen());
+		assertEquals(a, arista.getVerticeUno());
 	}
 
 	@Test
 	public void obtenerDestinoTest() {
 		Arista arista = new Arista(a, b);
-		assertEquals(b, arista.getDestino());
+		assertEquals(b, arista.getVerticeDos());
 	}
 
 	@Test

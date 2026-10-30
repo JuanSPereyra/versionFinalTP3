@@ -6,6 +6,7 @@ import java.util.Set;
 
 import coordinadorMVP.CoordinadorPresentadores;
 import estructuraDatosAux.Par;
+import estructuraDatosAux.TipoVertice;
 import estructuraDatosAux.VerticeVisual;
 import modelo.Instancia;
 import modelo.Solucion;
@@ -145,7 +146,10 @@ public class ResultadoPresentador {
 		Solucion sol = soluciones.get(indiceEstrategiaElegida);
 
 		List<VerticeVisual> vertices = instancia.getVertices().stream()
-				.map(v -> new VerticeVisual(v.getNombre(), sol.getVertices().contains(v))).toList();
+				.map(v -> new VerticeVisual(
+					v.getNombre(),
+					sol.getVertices().contains(v) ? TipoVertice.DOMINANTE : TipoVertice.COMUN
+					)).toList();
 
 		List<Par<String, String>> aristas = instancia.getAristasComoNombres();
 

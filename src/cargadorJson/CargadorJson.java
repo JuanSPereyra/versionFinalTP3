@@ -1,4 +1,4 @@
-package datos;
+package cargadorJson;
 
 import com.google.gson.Gson;
 

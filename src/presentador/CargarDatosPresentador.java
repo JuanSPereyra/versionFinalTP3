@@ -55,8 +55,8 @@ public class CargarDatosPresentador {
 	private void listenerEliminarArista() {
 		this._cdVista.listenerEliminarArista(e -> {
 			Par<String, String> aristaAEliminar = _cdVista.obtenerAristaAEliminar();
-			String origen = aristaAEliminar.getIzquierda();
-			String destino = aristaAEliminar.getDerecha();
+			String origen = aristaAEliminar.getObjetoUno();
+			String destino = aristaAEliminar.getObjetoDos();
 
 			manejarClickEliminarArista(origen, destino);
 		});
@@ -88,8 +88,8 @@ public class CargarDatosPresentador {
 
 	private void manejarClickAgregarArista(Par<String, String> aristaNueva) {
 		try {
-			String origen = aristaNueva.getIzquierda();
-			String destino = aristaNueva.getDerecha();
+			String origen = aristaNueva.getObjetoUno();
+			String destino = aristaNueva.getObjetoDos();
 
 			if (origen == null || destino == null || origen.equals(destino)) {
 				_cdVista.mostrarMensajeError("Debe seleccionar origen y destino válidos (y distintos)");
@@ -113,7 +113,7 @@ public class CargarDatosPresentador {
 		Vertice vertice = instancia.getVertice(nombre);
 
 		for (Arista arista : instancia.obtenerAristasDe(vertice)) {
-			_cdVista.eliminarArista(arista.getOrigen().getNombre(), arista.getDestino().getNombre());
+			_cdVista.eliminarArista(arista.getVerticeUno().getNombre(), arista.getVerticeDos().getNombre());
 		}
 
 		instancia.eliminarVertice(vertice);
@@ -149,8 +149,8 @@ public class CargarDatosPresentador {
 
 		if (instancia.getAristasComoNombres() != null) {
 			for (Par<String, String> arista : instancia.getAristasComoNombres()) {
-				String origen = arista.getIzquierda();
-				String destino = arista.getDerecha();
+				String origen = arista.getObjetoUno();
+				String destino = arista.getObjetoDos();
 				_cdVista.agregarArista(origen, destino, "");
 			}
 		}

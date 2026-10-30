@@ -41,8 +41,8 @@ public class TestStressPresentador implements InterfazTestStressPresentador {
 		this._tsVista.listenerEmpezarTest(e -> {
 			Par<String, Integer> datosParaTest = this._tsVista.datosParaTest();
 
-			String cantVertices = datosParaTest.getIzquierda();
-			int densidad = datosParaTest.getDerecha();
+			String cantVertices = datosParaTest.getObjetoUno();
+			int densidad = datosParaTest.getObjetoDos();
 
 			manejarClickBtnEmpezarTest(cantVertices, densidad);
 		});
