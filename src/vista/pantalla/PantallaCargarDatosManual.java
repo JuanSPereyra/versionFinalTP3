@@ -10,41 +10,32 @@ import estructuraDatosAux.Par;
 import vista.interfaz.CargarDatosVista;
 
 @SuppressWarnings("serial")
-public class PantallaCargarDatosManual extends JFrame implements CargarDatosVista {
+public class PantallaCargarDatosManual extends VistaBaseCompartida implements CargarDatosVista {
 
 	private String verticeAEliminarTemp, aristaOrigenTemp, aristaDestinoTemp;
 
 	private JPanel panelFondo;
 	private JButton btnVolver, btnIrResultado, btnAgregarVertice, btnAgregarArista;
-	private JLabel lblTitulo, lblNombreVertice, lblOrigen, lblDestino;
+	private JLabel lblTitulo, lblNombreVertice, lblOrigen, lblDestino, lblImagen;
 	private JTextField textNombreVertice;
 	private JTable tablaVertices, tablaAristas;
-	private JComboBox<String> comboOrigen, comboDestino;
+	private JComboBox<String> comboVerticeUno, comboVerticeDos;
 	private DefaultTableModel modeloVertices, modeloAristas;
 
 	public PantallaCargarDatosManual() {
-		configurarPantalla();
+		
+		panelFondo = configurarPantalla("Carga Manual");
 		crearTitulo();
 		crearSeccionVertices();
 		crearSeccionAristas();
 		crearElementos();
-	}
-
-	private void configurarPantalla() {
-		setTitle("Carga Manual (MVP)");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
-		setLocationRelativeTo(null);
-		setResizable(false);
-
-		panelFondo = new JPanel();
-		panelFondo.setBackground(new Color(30, 41, 59));
-		setContentPane(panelFondo);
-		panelFondo.setLayout(null);
+		crearImagenFondo();
 	}
 
 	private void crearTitulo() {
-		lblTitulo = new JLabel("CARGA MANUAL DE DATOS", SwingConstants.CENTER);
+		lblTitulo = crearLblTitulo("CARGA MANUAL DE DATOS");
+		panelFondo.add(lblTitulo);
+
 		estiloEtiqueta(lblTitulo);
 		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 22));
 		lblTitulo.setBounds(50, 20, 800, 35);
@@ -72,9 +63,10 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 	}
 
 	private void crearBtnAgregarVertice() {
-		btnAgregarVertice = new JButton("Agregar vértice");
-		estiloBotonPrimario(btnAgregarVertice);
-		btnAgregarVertice.setBounds(270, 108, 130, 34);
+		btnAgregarVertice = crearBtn("Agregar vértice");
+		btnAgregarVertice.setBounds(270, 108, 130, 34);	
+		btnAgregarVertice.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnAgregarVertice.setBackground(new Color(37, 99, 235));
 
 		panelFondo.add(btnAgregarVertice);
 	}
@@ -101,10 +93,10 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 		lblOrigen.setBounds(460, 80, 180, 22);
 		panelFondo.add(lblOrigen);
 
-		comboOrigen = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		estiloCombo(comboOrigen);
-		comboOrigen.setBounds(460, 108, 180, 34);
-		panelFondo.add(comboOrigen);
+		comboVerticeUno = new JComboBox<String>(new DefaultComboBoxModel<String>());
+		estiloCombo(comboVerticeUno);
+		comboVerticeUno.setBounds(460, 108, 180, 34);
+		panelFondo.add(comboVerticeUno);
 	}
 
 	private void crearSeccionDestino() {
@@ -113,22 +105,23 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 		lblDestino.setBounds(660, 80, 180, 22);
 		panelFondo.add(lblDestino);
 
-		comboDestino = new JComboBox<String>(new DefaultComboBoxModel<String>());
-		estiloCombo(comboDestino);
-		comboDestino.setBounds(660, 108, 180, 34);
-		panelFondo.add(comboDestino);
+		comboVerticeDos = new JComboBox<String>(new DefaultComboBoxModel<String>());
+		estiloCombo(comboVerticeDos);
+		comboVerticeDos.setBounds(660, 108, 180, 34);
+		panelFondo.add(comboVerticeDos);
 	}
 
 	private void crearBtnAgregarArista() {
-		btnAgregarArista = new JButton("Agregar arista");
-		estiloBotonPrimario(btnAgregarArista);
+		btnAgregarArista = crearBtn("Agregar arista");
 		btnAgregarArista.setBounds(460, 160, 380, 34);
+		btnAgregarArista.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnAgregarArista.setBackground(new Color(37, 99, 235));
 
 		panelFondo.add(btnAgregarArista);
 	}
 
 	private void crearTablaAristas() {
-		modeloAristas = crearModeloNoEditable(new String[] { "Origen", "Destino", "" });
+		modeloAristas = crearModeloNoEditable(new String[] { "Vertice Uno", "Vertice Dos", "" });
 		tablaAristas = new JTable(modeloAristas);
 		estiloTabla(tablaAristas);
 		configurarColumnaEliminar(tablaAristas);
@@ -142,9 +135,7 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 	}
 
 	private void crearBtnResultado() {
-		btnIrResultado = new JButton("Ver Resultado");
-		estiloBotonPrimario(btnIrResultado);
-		btnIrResultado.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnIrResultado = crearBtn("Ver Resultado");
 		btnIrResultado.setBackground(new Color(16, 185, 129));
 		btnIrResultado.setBounds(660, 470, 180, 42);
 
@@ -152,12 +143,10 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 	}
 
 	private void crearBtnVolverMenu() {
-		btnVolver = new JButton("Volver al Menú");
-		estiloBotonPrimario(btnVolver);
-		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		btnVolver = crearBtn("Volver al Menú");
 		btnVolver.setBackground(new Color(239, 68, 68));
 		btnVolver.setBounds(470, 470, 170, 42);
-
+		
 		panelFondo.add(btnVolver);
 	}
 
@@ -213,15 +202,10 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 		combo.setForeground(new Color(15, 23, 42));
 		combo.setBackground(new Color(241, 245, 249));
 	}
-
-	private void estiloBotonPrimario(JButton boton) {
-		boton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		boton.setForeground(Color.WHITE);
-		boton.setBackground(new Color(37, 99, 235));
-		boton.setFocusPainted(false);
-		boton.setBorderPainted(false);
-		boton.setOpaque(true);
-		boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	
+	private void crearImagenFondo() {
+		lblImagen = cargarImagen();
+		panelFondo.add(lblImagen);
 	}
 
 	@Override
@@ -284,8 +268,8 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 
 	@Override
 	public Par<String, String> obtenerOrigenDestinoDeArista() {
-		String origen = (String) comboOrigen.getSelectedItem();
-		String destino = (String) comboDestino.getSelectedItem();
+		String origen = (String) comboVerticeUno.getSelectedItem();
+		String destino = (String) comboVerticeDos.getSelectedItem();
 
 		Par<String, String> aristaNueva = new Par<String, String>(origen, destino);
 		return aristaNueva;
@@ -304,8 +288,8 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 	@Override
 	public void agregarVertice(String nombre) {
 		modeloVertices.addRow(new Object[] { nombre, "X" });
-		comboOrigen.addItem(nombre);
-		comboDestino.addItem(nombre);
+		comboVerticeUno.addItem(nombre);
+		comboVerticeDos.addItem(nombre);
 	}
 
 	@Override
@@ -321,8 +305,8 @@ public class PantallaCargarDatosManual extends JFrame implements CargarDatosVist
 				break;
 			}
 		}
-		comboOrigen.removeItem(nombre);
-		comboDestino.removeItem(nombre);
+		comboVerticeUno.removeItem(nombre);
+		comboVerticeDos.removeItem(nombre);
 	}
 
 	@Override

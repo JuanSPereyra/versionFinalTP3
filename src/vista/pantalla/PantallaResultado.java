@@ -13,25 +13,29 @@ import vista.graficador.LibreriaMxGraphWrapper;
 import vista.interfaz.ResultadoVista;
 
 @SuppressWarnings("serial")
-public class PantallaResultado extends JFrame implements ResultadoVista {
+public class PantallaResultado extends VistaBaseCompartida implements ResultadoVista {
 
 	private int solucionElegida;
 
 	private LibreriaMxGraphWrapper graficadorDeGrafo;
 
 	private JPanel panelFondo, panelGrafo;
-	private JLabel lblTitulo;
+	private JLabel lblTitulo, lblImagen;
 	private JTextArea txtResultado;
 	private JButton btnVolver, btnSalir, btnModificarDatos;
 	private JComboBox<Object> comboSoluciones;
 	private JComponent componenteDibujoDeGrafo;
-	private JScrollPane scrollPane;
+	private JScrollPane areaResultado;
 
 	private HashMap<String, Object> mapaDeVertices;
 
 	public PantallaResultado() {
 
-		configurarPantalla();
+		panelFondo = configurarPantalla("Conjunto Dominante Mínimo — Resultado");
+		crearElementos();
+	}
+
+	private void crearElementos() {
 		crearLblTitulo();
 		crearAreaResultado();
 		crearAreaMostrarGrafo();
@@ -39,45 +43,22 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 		crearBtnVolver();
 		crearBtnSalir();
 		crearBtnModificarDatos();
-	}
-
-	private void configurarPantalla() {
-		setTitle("Conjunto Dominante Mínimo — Resultado");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
-		setLocationRelativeTo(null);
-		setResizable(false);
-
-		panelFondo = new JPanel();
-		panelFondo.setBackground(new Color(30, 41, 59));
-		setContentPane(panelFondo);
-		panelFondo.setLayout(null);
+		crearImagenFondo();
 	}
 
 	private void crearLblTitulo() {
-		lblTitulo = new JLabel("RESULTADO DEL CONJUNTO DOMINANTE", SwingConstants.CENTER);
-		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		lblTitulo.setForeground(new Color(248, 250, 252));
+		lblTitulo = crearLblTitulo("RESULTADO DEL CONJUNTO DOMINANTE");
 		lblTitulo.setBounds(100, 30, 700, 40);
 		panelFondo.add(lblTitulo);
 	}
 
 	private void crearAreaResultado() {
-		txtResultado = new JTextArea();
-		txtResultado.setFont(new Font("Consolas", Font.PLAIN, 15));
-		txtResultado.setBackground(new Color(15, 23, 42));
-		txtResultado.setForeground(new Color(241, 245, 249));
-		txtResultado.setEditable(false);
-		txtResultado.setMargin(new Insets(15, 15, 15, 15));
-
-		crearScrollResultados();
-	}
-
-	private void crearScrollResultados() {
-		scrollPane = new JScrollPane(txtResultado);
-		scrollPane.setBorder(BorderFactory.createLineBorder(new Color(51, 65, 85)));
-		scrollPane.setBounds(39, 90, 411, 343);
-		panelFondo.add(scrollPane);
+		txtResultado = crearTxtResultado();
+		
+		areaResultado = crearScrollResultados(txtResultado);
+		areaResultado.setBounds(39, 90, 411, 343);
+		
+		panelFondo.add(areaResultado);
 	}
 
 	private void crearAreaMostrarGrafo() {
@@ -101,43 +82,32 @@ public class PantallaResultado extends JFrame implements ResultadoVista {
 	}
 
 	private void crearBtnVolver() {
-		btnVolver = new JButton("Volver al Menú");
-		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnVolver.setForeground(Color.WHITE);
+		btnVolver = crearBtn("Volver al Menú");
 		btnVolver.setBackground(new Color(37, 99, 235));
-		btnVolver.setFocusPainted(false);
-		btnVolver.setBorderPainted(false);
-		btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnVolver.setBounds(150, 487, 280, 45);
 
 		panelFondo.add(btnVolver);
 	}
 
 	private void crearBtnSalir() {
-		btnSalir = new JButton("Salir");
-		btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnSalir.setForeground(Color.WHITE);
+		btnSalir = crearBtn("Salir");
 		btnSalir.setBackground(new Color(239, 68, 68));
-		btnSalir.setFocusPainted(false);
-		btnSalir.setBorderPainted(false);
-		btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnSalir.setBounds(470, 487, 280, 45);
 
 		panelFondo.add(btnSalir);
 	}
 
 	private void crearBtnModificarDatos() {
-		btnModificarDatos = new JButton("Modificar datos");
-		btnModificarDatos.setOpaque(true);
-		btnModificarDatos.setForeground(Color.WHITE);
-		btnModificarDatos.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnModificarDatos.setFocusPainted(false);
-		btnModificarDatos.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnModificarDatos.setBorderPainted(false);
+		btnModificarDatos = crearBtn("Modificar datos");
 		btnModificarDatos.setBackground(new Color(255, 128, 64));
 		btnModificarDatos.setBounds(100, 444, 330, 32);
 
 		panelFondo.add(btnModificarDatos);
+	}
+	
+	private void crearImagenFondo() {
+		lblImagen = cargarImagen();
+		panelFondo.add(lblImagen);
 	}
 
 	@Override

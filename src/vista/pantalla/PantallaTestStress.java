@@ -9,20 +9,25 @@ import estructuraDatosAux.Par;
 import vista.interfaz.StressVista;
 
 @SuppressWarnings("serial")
-public class PantallaTestStress extends JFrame implements StressVista {
+public class PantallaTestStress extends VistaBaseCompartida implements StressVista {
 
 	private JButton btnDetenerTest, btnSalir, btnVolver, btnEmpezarTest;
 	private Container panelFondo;
 	private JComboBox<Object> comboDensidades;
-	private JLabel lblTitulo, lblElegirDensidad, lblCantidadVertices;
+	private JLabel lblTitulo, lblElegirDensidad, lblCantidadVertices, lblImagen;
 	private JTextArea txtResultado;
 	private JProgressBar barraProgreso;
 	private JTextField textCanVertices;
 	private DefaultListCellRenderer renderer;
+	private JScrollPane areaResultado;
 
 	public PantallaTestStress() {
 
-		configurarPantalla();
+		panelFondo = configurarPantalla("Conjunto Dominante Mínimo — Resultado");
+		crearElementos();
+	}
+
+	private void crearElementos() {
 		crearLblTitulo();
 		crearLblElegirDensidad();
 		crearLblCantidadVertices();
@@ -34,25 +39,11 @@ public class PantallaTestStress extends JFrame implements StressVista {
 		crearBtnEmpezarTest();
 		crearComboSoluciones();
 		crearBtnDetenerTest();
-	}
-
-	private void configurarPantalla() {
-		setTitle("Conjunto Dominante Mínimo — Resultado");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 600);
-		setLocationRelativeTo(null);
-		setResizable(false);
-
-		panelFondo = new JPanel();
-		panelFondo.setBackground(new Color(30, 41, 59));
-		setContentPane(panelFondo);
-		panelFondo.setLayout(null);
+		crearImagenFondo();
 	}
 
 	private void crearLblTitulo() {
-		lblTitulo = new JLabel("TEST DE STRESS", SwingConstants.CENTER);
-		lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
-		lblTitulo.setForeground(new Color(248, 250, 252));
+		lblTitulo = crearLblTitulo("TEST DE STRESS");
 		lblTitulo.setBounds(100, 30, 700, 40);
 		panelFondo.add(lblTitulo);
 	}
@@ -83,17 +74,10 @@ public class PantallaTestStress extends JFrame implements StressVista {
 	}
 
 	private void crearAreaResultado() {
-		txtResultado = new JTextArea();
-		txtResultado.setFont(new Font("Consolas", Font.PLAIN, 15));
-		txtResultado.setBackground(new Color(15, 23, 42));
-		txtResultado.setForeground(new Color(241, 245, 249));
-		txtResultado.setEditable(false);
-		txtResultado.setMargin(new Insets(15, 15, 15, 15));
-
-		JScrollPane scrollPane = new JScrollPane(txtResultado);
-		scrollPane.setBorder(BorderFactory.createLineBorder(new Color(51, 65, 85)));
-		scrollPane.setBounds(78, 69, 742, 274);
-		panelFondo.add(scrollPane);
+		txtResultado = crearTxtResultado();
+		
+		areaResultado = crearScrollResultados(txtResultado);
+		panelFondo.add(areaResultado);
 	}
 
 	private void crearBarraProgreso() {
@@ -107,39 +91,23 @@ public class PantallaTestStress extends JFrame implements StressVista {
 	}
 
 	private void crearBtnVolver() {
-		btnVolver = new JButton("Volver al Menú");
-		btnVolver.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnVolver.setForeground(Color.WHITE);
+		btnVolver = crearBtn("Volver al Menú");
 		btnVolver.setBackground(new Color(37, 99, 235));
-		btnVolver.setFocusPainted(false);
-		btnVolver.setBorderPainted(false);
-		btnVolver.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnVolver.setBounds(150, 496, 280, 45);
 
 		panelFondo.add(btnVolver);
 	}
 
 	private void crearBtnSalir() {
-		btnSalir = new JButton("Salir");
-		btnSalir.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnSalir.setForeground(Color.WHITE);
+		btnSalir = crearBtn("Salir");
 		btnSalir.setBackground(new Color(239, 68, 68));
-		btnSalir.setFocusPainted(false);
-		btnSalir.setBorderPainted(false);
-		btnSalir.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		btnSalir.setBounds(470, 496, 280, 45);
 
 		panelFondo.add(btnSalir);
 	}
 
 	private void crearBtnEmpezarTest() {
-		btnEmpezarTest = new JButton("Comenzar Test\t");
-		btnEmpezarTest.setOpaque(true);
-		btnEmpezarTest.setForeground(Color.WHITE);
-		btnEmpezarTest.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnEmpezarTest.setFocusPainted(false);
-		btnEmpezarTest.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnEmpezarTest.setBorderPainted(false);
+		btnEmpezarTest = crearBtn("Comenzar Test");
 		btnEmpezarTest.setBackground(new Color(0, 128, 128));
 		btnEmpezarTest.setBounds(587, 354, 193, 40);
 
@@ -165,18 +133,17 @@ public class PantallaTestStress extends JFrame implements StressVista {
 	}
 
 	private void crearBtnDetenerTest() {
-		btnDetenerTest = new JButton("Detener Test\t");
-		btnDetenerTest.setOpaque(true);
-		btnDetenerTest.setForeground(Color.WHITE);
-		btnDetenerTest.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnDetenerTest.setFocusPainted(false);
-		btnDetenerTest.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnDetenerTest.setBorderPainted(false);
+		btnDetenerTest = crearBtn("Detener Test");
 		btnDetenerTest.setBackground(new Color(255, 128, 64));
 		btnDetenerTest.setBounds(587, 405, 193, 40);
 		btnDetenerTest.setEnabled(false);
 
 		panelFondo.add(btnDetenerTest);
+	}
+	
+	private void crearImagenFondo() {
+		lblImagen = cargarImagen();
+		panelFondo.add(lblImagen);
 	}
 
 	@Override
