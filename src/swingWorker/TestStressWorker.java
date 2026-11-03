@@ -23,8 +23,11 @@ public class TestStressWorker extends SwingWorker<String, String> {
 	private int cantidadTotalAristas;
 	private int cantidadAristasAUsar;
 	private Set<Vertice> resultado;
-	private double tiempo;
+	private double tiempoActual;
 	private GeneradorGrafo generadorGrafoRnd;
+	private long inicioDelaPrueba;
+	private double tiempoTotal;
+	private Set<Vertice> setVerticesEnResultado;
 
 	public TestStressWorker(InterfazTestStressPresentador InterfazPresentador, int cantVertices, int densidad) {
 		this._interfazPresentador = InterfazPresentador;
@@ -44,28 +47,32 @@ public class TestStressWorker extends SwingWorker<String, String> {
 	@Override
 	protected String doInBackground() {
 
-		double total = 0;
+		tiempoTotal = 0;
 
 		for (int i = 1; i <= solucionesMaximas && !isCancelled(); i++) {
 
-			long inicio = System.currentTimeMillis();
+			inicioDelaPrueba = System.currentTimeMillis();
 
 			calcularCantidadAristas(i, densidad);
-			Set<Vertice> resultado = resolverGrafo(i, cantidadAristasAUsar);
+			setVerticesEnResultado = resolverGrafo(i, cantidadAristasAUsar);
 
 			if (!isCancelled()) {
-				this.tiempo = (System.currentTimeMillis() - inicio) / 1000.0;
-				total += tiempo;
-
-				this.iteracion = i;
-				this.resultado = resultado;
-
-				publish(armarTexto());
-				pausar(250);
+				actualizarDatosDeIteracion(i);
 			}
 		}
-		BigDecimal redondeado = new BigDecimal(total).setScale(3, RoundingMode.HALF_UP);
+		BigDecimal redondeado = new BigDecimal(tiempoTotal).setScale(3, RoundingMode.HALF_UP);
 		return "TestStress Finalizado." + "\n" + "Tiempo total de la ejecucion: " + redondeado + " segundos";
+	}
+
+	private void actualizarDatosDeIteracion(int i) {
+		this.tiempoActual = (System.currentTimeMillis() - inicioDelaPrueba) / 1000.0;
+		tiempoTotal += tiempoActual;
+
+		this.iteracion = i;
+		this.resultado = setVerticesEnResultado;
+
+		publish(armarTexto());
+		pausar(200);
 	}
 
 	private void calcularCantidadAristas(int numVertice, int densidad) {
@@ -92,7 +99,7 @@ public class TestStressWorker extends SwingWorker<String, String> {
 		sb.append("Cantidad máxima de Aristas: " + this.cantidadTotalAristas + "\n");
 		sb.append("Cantidad de Aristas utilizadas: " + this.cantidadAristasAUsar + "\n");
 		sb.append(conjuntoEntreLLaves(this.resultado) + "\n");
-		sb.append("Tiempo utilizado: " + this.tiempo + "\n");
+		sb.append("Tiempo utilizado: " + this.tiempoActual + "\n");
 		return sb.toString();
 	}
 

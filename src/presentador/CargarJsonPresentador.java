@@ -17,6 +17,9 @@ public class CargarJsonPresentador {
 	private CoordinadorPresentadores coordinador;
 	private Instancia instancia;
 	private GrafoJson datosGrafo;
+	private JFileChooser fileChooser;
+	private FileNameExtensionFilter filtro;
+	private File archivoSeleccionado;
 
 	public CargarJsonPresentador(CargarJsonVista vista, Instancia instancia, CoordinadorPresentadores coordinador) {
 		this._vista = vista;
@@ -46,31 +49,37 @@ public class CargarJsonPresentador {
 
 	private void abrirExploradorArchivos() {
 
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setDialogTitle("Seleccionar grafo en formato JSON");
-
-		FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos JSON (*.json)", "json");
-		fileChooser.setFileFilter(filtro);
-		fileChooser.setAcceptAllFileFilterUsed(false);
+		configurarFileChooser();
 
 		int seleccion = fileChooser.showOpenDialog(null);
 
 		if (seleccion == JFileChooser.APPROVE_OPTION) {
-			File archivoSeleccionado = fileChooser.getSelectedFile();
+			archivoSeleccionado = fileChooser.getSelectedFile();
 			_vista.mostrarRutaArchivo(archivoSeleccionado.getName());
 
 			try {
-				this.datosGrafo = CargadorJson.cargarGrafo(archivoSeleccionado.getAbsolutePath());
-				instancia.limpiar();
-				transformarGrafoJsonAInstancia();
-				_vista.habilitarBotonResultado(true);
+				cargarDatosAInstancia();
 
 			} catch (Exception e) {
-				_vista.mostrarMensajeError("Error al cargar la estructura del grafo.");
-				_vista.habilitarBotonResultado(false);
-				_vista.mostrarRutaArchivo("Ningún archivo seleccionado");
+				manejarExcepcion();
 			}
 		}
+	}
+
+	private void configurarFileChooser() {
+		fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Seleccionar grafo en formato JSON");
+
+		filtro = new FileNameExtensionFilter("Archivos JSON (*.json)", "json");
+		fileChooser.setFileFilter(filtro);
+		fileChooser.setAcceptAllFileFilterUsed(false);
+	}
+
+	private void cargarDatosAInstancia() {
+		datosGrafo = CargadorJson.cargarGrafo(archivoSeleccionado.getAbsolutePath());
+		instancia.limpiar();
+		transformarGrafoJsonAInstancia();
+		_vista.habilitarBotonResultado(true);
 	}
 
 	private void transformarGrafoJsonAInstancia() {
@@ -92,5 +101,11 @@ public class CargarJsonPresentador {
 				instancia.agregarVertice(v.trim());
 			}
 		}
+	}
+	
+	private void manejarExcepcion() {
+		_vista.mostrarMensajeError("Error al cargar la estructura del grafo.");
+		_vista.habilitarBotonResultado(false);
+		_vista.mostrarRutaArchivo("Ningún archivo seleccionado");
 	}
 }
