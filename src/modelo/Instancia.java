@@ -10,7 +10,7 @@ import modelo.grafo.Grafo;
 import modelo.grafo.Vertice;
 
 public class Instancia {
-	private final Grafo grafo;
+	private Grafo grafo;
 
 	public Instancia() {
 		grafo = new Grafo();
@@ -80,5 +80,10 @@ public class Instancia {
 
 	public Grafo getGrafo() {
 		return this.grafo;
+	}
+
+	public void limpiar() {
+		grafo = new Grafo();
+		
 	}
 }

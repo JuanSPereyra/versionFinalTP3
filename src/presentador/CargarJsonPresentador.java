@@ -61,7 +61,7 @@ public class CargarJsonPresentador {
 
 			try {
 				this.datosGrafo = CargadorJson.cargarGrafo(archivoSeleccionado.getAbsolutePath());
-
+				instancia.limpiar();
 				transformarGrafoJsonAInstancia();
 				_vista.habilitarBotonResultado(true);
 
